@@ -1,0 +1,20 @@
+{
+  "name": "siglip-onnx-node",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SigLIP image embeddings in pure Node.js (ONNX) + k-NN/centroid product recognition with abstention gating",
+  "scripts": {
+    "build-index": "tsx scripts/build-index.ts",
+    "recognize": "tsx scripts/recognize.ts"
+  },
+  "dependencies": {
+    "onnxruntime-node": "^1.26.0",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.0"
+  }
+}

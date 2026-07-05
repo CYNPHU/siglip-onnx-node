@@ -1,0 +1,7 @@
+node_modules/
+models/*.onnx
+models/reference_index.json
+reference/**/*.jpg
+reference/**/*.jpeg
+reference/**/*.png
+__pycache__/
