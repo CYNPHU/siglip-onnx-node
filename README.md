@@ -68,6 +68,16 @@ Two safety layers sit on top:
 - **Abstention gate** — below a cosine threshold the recognizer returns `null` rather than a guess. In our production calibration, a 0.73 gate corresponded to ≈95% precision; below ~0.6 was mostly partial/edge-crop noise. Calibrate on your own data — an abstaining model composes cleanly with a fallback (in production, a VLM pass), a guessing one poisons everything downstream.
 - **Brand-consensus rescue** — when top-1 falls below the gate but ≥5 of the top-6 neighbours agree on one *brand* (with a floor on top-1 and a margin over the runner-up brand), emit a brand-confident / variant-weak result instead of nothing. Guards matter: the floor stops off-catalog junk from becoming a brand; the margin stops a brand with many references winning by base rate.
 
+## Production numbers
+
+From the deployment this was extracted from:
+
+- **~1,750 reference embeddings** covering a **400+ SKU catalog**, loaded in-process — index build and lookup are plain typed-array math, no vector DB needed at this scale.
+- **~85 ms per crop on CPU** (2-vCPU app server) — no GPU, no Python service.
+- **torch ↔ ONNX parity cosine ~1.0** at export; **Node ↔ Python embedding parity > 0.99** on the same images.
+- **Abstention gate 0.73 ≈ 95% precision** on an end-to-end calibration probe; below ~0.6 was mostly partial/edge-crop noise.
+- Raising the consensus floor 0.65 → 0.70 cut false-brand hits on background objects **16 → 11 with zero recall cost** on a curation probe — thresholds ship as env vars because they are catalog-dependent, and were tuned by measurement, not intuition.
+
 ## Repo layout
 
 ```
